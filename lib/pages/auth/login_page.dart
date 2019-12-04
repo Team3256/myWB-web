@@ -1,6 +1,12 @@
+import 'dart:convert';
+import 'dart:ui';
+import 'package:fluro/fluro.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:mywb_web/utils/config.dart';
 import 'package:mywb_web/utils/theme.dart';
+import 'dart:html' as html;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -64,11 +70,47 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void googleLogin() async {
+    try {
+      fb.auth().setPersistence("local");
+      await fb.auth().signInWithPopup(fb.GoogleAuthProvider());
+      if (fb.auth().currentUser != null) {
+        print(fb.auth().currentUser.uid);
+        print(fb.auth().currentUser.displayName);
+        print(fb.auth().currentUser.email);
+        try {
+          http.get("$apiHost/api/users/${fb.auth().currentUser.uid}").then((response) {
+            print(response.body);
+            if (response.statusCode == 200) {
+              print("USER EXISTS IN DB");
+              var userJson = jsonDecode(response.body);
+              if (userJson["discordID"] == "404" || userJson["discordAuthToken"] == "404") {
+                // Need to setup discord integration
+                router.navigateTo(context, '/register/discord', transition: TransitionType.fadeIn);
+              }
+              else {
+                router.navigateTo(context, '/', transition: TransitionType.fadeIn);
+              }
+            }
+            else if (response.statusCode == 404) {
+              print("USER NOT IN DB");
+              router.navigateTo(context, '/register', transition: TransitionType.fadeIn);
+            }
+          });
+        } catch (error) {
+          print(error);
+        }
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   void checkAuth() async {
     if (fb.auth().currentUser != null) {
       print(fb.auth().currentUser.uid);
       await Future.delayed(const Duration(milliseconds: 100));
-      Navigator.pushNamed(context, '/');
+      router.navigateTo(context, '/', transition: TransitionType.fadeIn);
     }
     else {
       print("User not logged");
@@ -84,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _LoginPageState() {
+    print(html.window.location.toString());
     loginWidget = new RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       onPressed: login,
@@ -107,13 +150,13 @@ class _LoginPageState extends State<LoginPage> {
             elevation: 6.0,
             child: new Container(
               padding: EdgeInsets.all(32.0),
-              height: 400.0,
-              width: 500.0,
+              height: 415.0,
+              width: (MediaQuery.of(context).size.width > 500) ? 500.0 : MediaQuery.of(context).size.width - 25,
               child: new ListView(
                 children: <Widget>[
-                  new Text("Login", style: TextStyle(fontFamily: "Product Sans", fontSize: 35, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                  new Text("Login", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                   new Padding(padding: EdgeInsets.all(16.0),),
-                  new Text("Login to your myWB Account below!", style: TextStyle(fontFamily: "Product Sans"), textAlign: TextAlign.center,),
+                  new Text("Login to your myWB Account below!", textAlign: TextAlign.center,),
                   new TextField(
                     decoration: InputDecoration(
                         icon: new Icon(Icons.email),
@@ -146,7 +189,36 @@ class _LoginPageState extends State<LoginPage> {
                   new Padding(padding: EdgeInsets.all(8.0)),
                   loginWidget,
                   new Padding(padding: EdgeInsets.all(8.0)),
-
+                  OutlineButton(
+                    onPressed: () {
+                      googleLogin();
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                    highlightElevation: 0.0,
+                    borderSide: BorderSide(color: Colors.grey),
+                    highlightedBorderColor: mainColor,
+                    highlightColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image(image: AssetImage("images/google_logo.png"), height: 25.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Sign in with Google',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

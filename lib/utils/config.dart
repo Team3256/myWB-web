@@ -8,6 +8,8 @@ String appFull = "Version ${appVersion.toString()}";
 
 final router = new Router();
 
+String apiHost = "http://localhost:8081";
+
 String appLegal = """
 MIT License
 Copyright (c) 2018 Equinox Initiative

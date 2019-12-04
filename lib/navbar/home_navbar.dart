@@ -55,7 +55,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
               ),
               new Padding(padding: EdgeInsets.all(4.0),),
               new Visibility(
-                visible: true,
+                visible: (fb.auth().currentUser == null),
                 child: new RaisedButton(
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -64,6 +64,21 @@ class _HomeNavbarState extends State<HomeNavbar> {
                   color: mainColor,
                   onPressed: () {
                     router.navigateTo(context, '/login', transition: TransitionType.materialFullScreenDialog);
+                  },
+                ),
+              ),
+              new Visibility(
+                visible: (fb.auth().currentUser != null),
+                child: new RaisedButton(
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                  child: new Text("SIGN OUT"),
+                  textColor: Colors.white,
+                  color: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      fb.auth().signOut();
+                    });
                   },
                 ),
               ),

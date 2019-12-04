@@ -3,6 +3,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mywb_web/pages/auth/login_page.dart';
+import 'package:mywb_web/pages/auth/register_discord_page.dart';
+import 'package:mywb_web/pages/auth/register_page.dart';
 import 'package:mywb_web/pages/home/home_page.dart';
 import 'package:mywb_web/pages/not_found_page.dart';
 import 'package:mywb_web/utils/config.dart';
@@ -21,6 +23,12 @@ void main() {
   // AUTH ROUTES
   router.define('/login', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new LoginPage();
+  }));
+  router.define('/register', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new RegisterPage();
+  }));
+  router.define('/register/discord', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new RegisterDiscordPage();
   }));
 
   // HOME ROUTES

@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
@@ -12,6 +14,9 @@ class HomeNavbar extends StatefulWidget {
 }
 
 class _HomeNavbarState extends State<HomeNavbar> {
+
+  final Storage _localStorage = html.window.localStorage;
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -55,7 +60,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
               ),
               new Padding(padding: EdgeInsets.all(4.0),),
               new Visibility(
-                visible: (fb.auth().currentUser == null),
+                visible: (!_localStorage.containsKey("userID")),
                 child: new RaisedButton(
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -68,7 +73,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 ),
               ),
               new Visibility(
-                visible: (fb.auth().currentUser != null),
+                visible: (_localStorage.containsKey("userID")),
                 child: new RaisedButton(
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -78,6 +83,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                   onPressed: () {
                     setState(() {
                       fb.auth().signOut();
+                      _localStorage.remove("userID");
                     });
                   },
                 ),

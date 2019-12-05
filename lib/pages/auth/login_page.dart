@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:ui';
 import 'package:fluro/fluro.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final Storage _localStorage = html.window.localStorage;
 
   Widget loginWidget = new Container();
 
@@ -78,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
         print(fb.auth().currentUser.uid);
         print(fb.auth().currentUser.displayName);
         print(fb.auth().currentUser.email);
+        _localStorage["userID"] = fb.auth().currentUser.uid;
         try {
           http.get("$apiHost/api/users/${fb.auth().currentUser.uid}").then((response) {
             print(response.body);
@@ -107,8 +111,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void checkAuth() async {
-    if (fb.auth().currentUser != null) {
-      print(fb.auth().currentUser.uid);
+    if (_localStorage.containsKey("userID")) {
+      print("USER ALREADY LOGGED: ${_localStorage["userID"]}");
       await Future.delayed(const Duration(milliseconds: 100));
       router.navigateTo(context, '/', transition: TransitionType.fadeIn);
     }

@@ -21,8 +21,8 @@ class User {
   User();
 
   User.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        firstName = json['firstName'],
+      : id = json["id"],
+        firstName = json["firstName"],
         lastName = json["lastName"],
         email = json["email"],
         phone = json["phone"],
@@ -31,9 +31,9 @@ class User {
         shirtSize = json["shirtSize"],
         jacketSize = json["jacketSize"],
         discordID = json["discordID"],
-        discordAuthToken = json["discordAuthToken"],
-        perms = json["perms"],
-        subteams = json["subteams"];
+        discordAuthToken = json["discordAuthToken"];
+//        perms = json["perms"],
+//        subteams = json["subteams"];
 
   Map toJson() {
     Map json = new Map();

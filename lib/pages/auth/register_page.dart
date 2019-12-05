@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
 
 import 'package:fluro/fluro.dart';
@@ -19,6 +20,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
+  final Storage _localStorage = html.window.localStorage;
 
   Color vBtnColor = mainColor;
   Color vBtnTxtBtnColor = Colors.white;
@@ -50,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool varsity = true;
 
   void checkAuth() async {
-    if (fb.auth().currentUser != null) {
+    if (_localStorage.containsKey("userID")) {
       print(fb.auth().currentUser.uid);
       print("User is registered with google");
     }

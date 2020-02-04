@@ -15,6 +15,7 @@
 *.iws
 .idea/
 
+lib/utils/config.dart
 lib/utils/service_account.dart
 
 # The .vscode folder contains launch configuration and tasks you configure in

@@ -30,8 +30,8 @@ class _HomeNavbarState extends State<HomeNavbar> {
             height: 50,
             width: 300,
             child: new Text(
-              "myWB",
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+              "WarriorBorgs 3256",
+              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, fontFamily: "Oswald"),
               textAlign: TextAlign.center,
             )
           ),
@@ -41,6 +41,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
               new FlatButton(
                 child: new Text("HOME"),
                 onPressed: () {
+                  router.navigateTo(context, '/', transition: TransitionType.fadeIn);
                 },
               ),
               new FlatButton(
@@ -84,6 +85,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                     setState(() {
                       fb.auth().signOut();
                       _localStorage.remove("userID");
+                      html.window.location.reload();
                     });
                   },
                 ),

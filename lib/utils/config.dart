@@ -8,7 +8,10 @@ String appFull = "Version ${appVersion.toString()}";
 
 final router = new Router();
 
-String apiHost = "http://localhost:8081";
+String dbHost = "http://24.4.73.109:8081/api";
+String authHost = "http://24.4.73.109:8082/api";
+
+String apiKey = "LzPyVSZOWw3DQC3EWO1";
 
 String appLegal = """
 MIT License

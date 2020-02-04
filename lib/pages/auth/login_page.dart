@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         print(fb.auth().currentUser.email);
         _localStorage["userID"] = fb.auth().currentUser.uid;
         try {
-          http.get("$apiHost/api/users/${fb.auth().currentUser.uid}").then((response) {
+          http.get("$dbHost/users/${fb.auth().currentUser.uid}", headers: {"Authentication": "Bearer $apiKey"}).then((response) {
             print(response.body);
             if (response.statusCode == 200) {
               print("USER EXISTS IN DB");
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (fb.auth().currentUser == null) {
+    if (!_localStorage.containsKey("userID")) {
       return new Scaffold(
         backgroundColor: currBackgroundColor,
         body: new Center(
@@ -154,11 +154,11 @@ class _LoginPageState extends State<LoginPage> {
             elevation: 6.0,
             child: new Container(
               padding: EdgeInsets.all(32.0),
-              height: 415.0,
+              height: 420.0,
               width: (MediaQuery.of(context).size.width > 500) ? 500.0 : MediaQuery.of(context).size.width - 25,
               child: new ListView(
                 children: <Widget>[
-                  new Text("Login", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                  new Text("Login", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
                   new Padding(padding: EdgeInsets.all(16.0),),
                   new Text("Login to your myWB Account below!", textAlign: TextAlign.center,),
                   new TextField(

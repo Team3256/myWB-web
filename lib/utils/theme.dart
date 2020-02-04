@@ -22,4 +22,5 @@ var currDividerColor = lightDividerColor;
 ThemeData mainTheme = new ThemeData(
   accentColor: mainColor,
   primaryColor: mainColor,
+  fontFamily: "Roboto"
 );

@@ -54,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void checkAuth() async {
     if (_localStorage.containsKey("userID")) {
-      print(fb.auth().currentUser.uid);
+      print(_localStorage["userID"]);
       print("User is registered with google");
     }
     else {
@@ -86,11 +86,11 @@ class _RegisterPageState extends State<RegisterPage> {
           elevation: 6.0,
           child: new Container(
             padding: EdgeInsets.all(32.0),
-            height: 700.0,
+            height: 710.0,
             width: (MediaQuery.of(context).size.width > 500) ? 500.0 : MediaQuery.of(context).size.width - 25,
             child: new ListView(
               children: <Widget>[
-                new Text("Register", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                new Text("Register", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center,),
                 new Padding(padding: EdgeInsets.all(16.0),),
                 new Text("Finish creating your myWB Account below!", textAlign: TextAlign.center,),
                 new TextField(
@@ -274,7 +274,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                     else {
                       try {
-                        User registerUser = new User();
+                        User registerUser = new User.plain();
                         registerUser.id = fb.auth().currentUser.uid;
                         registerUser.firstName = firstName;
                         registerUser.lastName = lastName;
@@ -287,13 +287,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         registerUser.jacketSize = jacketSize;
                         registerUser.discordID = "404";
                         registerUser.discordAuthToken = "404";
-                        registerUser.discordAuthToken = "404";
-
-                        await http.post("$apiHost/api/users", body: jsonEncode(registerUser), headers: {HttpHeaders.contentTypeHeader: "application/json"}).then((response) {
+                        await http.post("$dbHost/users", body: jsonEncode(registerUser), headers: {HttpHeaders.contentTypeHeader: "application/json", "Authentication": "Bearer $apiKey"}).then((response) {
                           print(response.body);
                           if (response.statusCode == 200) {
                             print("SUCCESS");
-                            html.window.location.assign("http://localhost:8082/api/auth/discord/login");
+                            router.navigateTo(context, '/register/discord', transition: TransitionType.fadeIn);
                           }
                           else if (response.statusCode == 409) {
                             print("USER ALREADY IN DB");

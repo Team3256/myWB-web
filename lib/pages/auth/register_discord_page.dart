@@ -26,32 +26,35 @@ class _RegisterDiscordPageState extends State<RegisterDiscordPage> {
     if (_localStorage.containsKey("userID")) {
       print(_localStorage["userID"]);
       print("User is registered with google");
+      print(html.window.location.toString());
       if (!html.window.location.toString().contains("?token")) {
         print("TOKEN NOT PROVIDED");
-        html.window.location.assign("http://localhost:8082/api/auth/discord/login");
+        html.window.location.assign("$authHost/auth/discord/login");
       }
       else {
         String token = html.window.location.toString().split("?token=")[1];
         print(token);
         if (token != "NO_CODE_PROVIDED") {
           print("TOKEN PROVIDED");
-          http.get("https://discordapp.com/api/users/@me", headers: {"Authorization": "Bearer $token"}).then((response) async {
+          print(token);
+          await http.get("https://discordapp.com/api/users/@me", headers: {"Authorization": "Bearer $token"}).then((response) async {
             print(response.body);
             var discordJson = jsonDecode(response.body);
             setState(() {
               displayWidget = new Text("Successfully retrieved Discord information:\n\n${response.body}");
             });
-            await http.get("$apiHost/api/users/${_localStorage["userID"]}").then((response) async {
+            await http.get("$dbHost/users/${_localStorage["userID"]}", headers: {"Authentication": "Bearer $apiKey"}).then((response) async {
               print(response.body);
-              User currUser = User.fromJson(jsonDecode(response.body));
+              User currUser = User(jsonDecode(response.body));
               print("TOKEN: " + token.toString());
               print("USER DISCORD ID: " + discordJson["id"].toString());
               currUser.discordAuthToken = token.toString();
               currUser.discordID = discordJson["id"].toString();
-              await http.put("$apiHost/api/users/${_localStorage["userID"]}", body: jsonEncode(currUser), headers: {HttpHeaders.contentTypeHeader: "application/json"}).then((response) {
+              await http.put("$dbHost/users/${_localStorage["userID"]}", body: jsonEncode(currUser), headers: {HttpHeaders.contentTypeHeader: "application/json", "Authentication": "Bearer $apiKey"}).then((response) async {
                 print(response.body);
                 if (response.statusCode == 200) {
                   print("SUCCESS");
+                  await Future.delayed(const Duration(seconds: 3));
                   router.navigateTo(context, '/', transition: TransitionType.fadeIn);
                 }
                 else {

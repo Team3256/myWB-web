@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class User {
-
   String id;
   String firstName;
   String lastName;
@@ -18,22 +17,30 @@ class User {
   List<String> subteams = new List();
   List<String> perms = new List();
 
-  User();
+  User.plain();
 
-  User.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        firstName = json["firstName"],
-        lastName = json["lastName"],
-        email = json["email"],
-        phone = json["phone"],
-        role = json["role"],
-        varsity = json["varsity"],
-        shirtSize = json["shirtSize"],
-        jacketSize = json["jacketSize"],
-        discordID = json["discordID"],
-        discordAuthToken = json["discordAuthToken"];
-//        perms = json["perms"],
-//        subteams = json["subteams"];
+  User(Map<String, dynamic> json) {
+    id = json["id"];
+    firstName = json["firstName"];
+    lastName = json["lastName"];
+    email = json["email"];
+    phone = json["phone"];
+    grade = json["grade"];
+    role = json["role"];
+    varsity = json["varsity"];
+    shirtSize = json["shirtSize"];
+    jacketSize = json["jacketSize"];
+    discordID = json["discordID"];
+    discordAuthToken = json["discordAuthToken"];
+
+    for (int i = 0; i < json["subteams"].length; i++) {
+      subteams.add(json["subteams"][i]);
+    }
+
+    for (int i = 0; i < json["perms"].length; i++) {
+      perms.add(json["perms"][i]);
+    }
+  }
 
   Map toJson() {
     Map json = new Map();
@@ -42,6 +49,7 @@ class User {
     json["lastName"] = lastName;
     json["email"] = email;
     json["phone"] = phone;
+    json["grade"] = grade;
     json["role"] = role;
     json["varsity"] = varsity;
     json["shirtSize"] = shirtSize;

@@ -29,8 +29,9 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
 
   List<Widget> widgetList = new List();
 
-  fb.UploadTask _uploadTask;
   double uploadProgress = 0;
+
+  bool loading = false;
 
   String prID = "";
   bool isSheet = false;
@@ -72,22 +73,33 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
       if (files.length == 1) {
         final file = files[0];
         final reader = new FileReader();
-        reader.onLoadEnd.listen((e) {
-          _uploadTask = fb.storage().ref("purchase-requests/$prID.pdf").put(file);
-          _uploadTask.jsObject.on('state_changed', (snapshot) async {
-            setState(() {
-              uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            });
-            print(uploadProgress.toString());
-            if (uploadProgress == 100) {
-              await Future.delayed(const Duration(seconds: 2));
-              var downUrl = await _uploadTask.snapshot.ref.getDownloadURL();
-              setState(() {
-                partUrl = downUrl.toString();
-              });
-              print(partUrl);
-            }
+        reader.onLoadEnd.listen((e) async {
+          setState(() {
+            uploadProgress = 20;
           });
+          await fb.storage().ref("purchase-requests/$prID.pdf").put(file).future.then((fb.UploadTaskSnapshot snapshot) async {
+            await Future.delayed(const Duration(seconds: 1));
+            var downUrl = await snapshot.ref.getDownloadURL();
+            setState(() {
+              partUrl = downUrl.toString();
+              uploadProgress = 100;
+            });
+            print(partUrl);
+          });
+//          _uploadTask.jsObject.on('state_changed', (snapshot) async {
+//            setState(() {
+//              uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+//            });
+//            print(uploadProgress.toString());
+//            if (uploadProgress == 100) {
+//              await Future.delayed(const Duration(seconds: 2));
+//              var downUrl = await _uploadTask.snapshot.ref.getDownloadURL();
+//              setState(() {
+//                partUrl = downUrl.toString();
+//              });
+//              print(partUrl);
+//            }
+//          });
         });
         reader.readAsDataUrl(file);
       }
@@ -110,6 +122,7 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
     currUser.email = "";
     getUser();
     prID = fb.database().ref("pushID").push().key;
+    print(prID);
   }
 
   @override
@@ -601,6 +614,26 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
                                     });
                                   },
                                 ),
+                                new RadioListTile(
+                                  title: new Text("AdaFruit"),
+                                  value: 14,
+                                  groupValue: vendor == "AdaFruit" ? 14 : 1,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      vendor = "AdaFruit";
+                                    });
+                                  },
+                                ),
+                                new RadioListTile(
+                                  title: new Text("Other"),
+                                  value: 15,
+                                  groupValue: vendor == "Other" ? 15 : 1,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      vendor = "Other";
+                                    });
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -725,7 +758,7 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
                       ),
                       new Visibility(visible: !isSheet, child: new Padding(padding: EdgeInsets.all(8.0),)),
                       new Visibility(
-                        visible: !isSheet && partName != "" && partNumber != "" && partQuantity != null && partUrl != "" && cost != null && justification != "" && vendor != "",
+                        visible: !isSheet && partName != "" && partNumber != "" && partQuantity != null && partUrl != "" && cost != null && justification != "" && vendor != "" && !loading,
 //                        visible: true,
                         child: new RaisedButton(
                           child: new Text("Submit Purchase Request", style: TextStyle(fontSize: 20.0)),
@@ -734,34 +767,47 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
                           textColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
                           onPressed: () async {
-                            await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
-                              "id": prID,
-                              "isSheet": false,
-                              "userID": currUser.id,
-                              "partName": partName,
-                              "partQuantity": partQuantity,
-                              "partUrl": partUrl,
-                              "vendor": vendor,
-                              "needBy": DateFormat("yyyy-MM-dd").format(needBy),
-                              "submittedOn": DateFormat.yMd().format(DateTime.now()).toString(),
-                              "partNumber": partNumber,
-                              "cost": cost,
-                              "totalCost": double.tryParse((cost * partQuantity).toStringAsFixed(2)),
-                              "justification": justification
-                            })).then((response) async {
-                              print(response.body);
-                              if (response.statusCode != 200) {
-                                html.window.alert(response.body);
-                              }
-                              else {
-                                router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
-                              }
+                            setState(() {
+                              loading = true;
+                            });
+                            await cycleApiKey().then((value) async {
+                              await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
+                                "id": prID,
+                                "isSheet": false,
+                                "userID": currUser.id,
+                                "partName": partName,
+                                "partQuantity": partQuantity,
+                                "partUrl": partUrl,
+                                "vendor": vendor,
+                                "needBy": DateFormat("yyyy-MM-dd").format(needBy),
+                                "submittedOn": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                                "partNumber": partNumber,
+                                "cost": cost,
+                                "totalCost": double.tryParse((cost * partQuantity).toStringAsFixed(2)),
+                                "justification": justification,
+                                "status": "pending"
+                              })).then((response) async {
+                                print(response.body);
+                                if (response.statusCode != 200) {
+                                  html.window.alert(response.body);
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                }
+                                else {
+                                  await http.post(prDiscordUrl, headers: {"Content-Type": "application/json"}, body: jsonEncode({
+                                    "content": "<@${currUser.discordID}> your purchase request for $partName was recieved!\n<http://vcrobotics.net/#/purchase-request/view?id=${prID}>"
+                                  })).then((response) {
+                                    router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
+                                  });
+                                }
+                              });
                             });
                           },
                         ),
                       ),
                       new Visibility(
-                      visible: isSheet && partUrl != "",
+                      visible: isSheet && partUrl != "" && !loading,
 //                        visible: true,
                         child: new RaisedButton(
                           child: new Text("Submit PR Sheet", style: TextStyle(fontSize: 20.0)),
@@ -770,30 +816,52 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
                           textColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
                           onPressed: () async {
-                            await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
-                              "id": prID,
-                              "isSheet": true,
-                              "userID": currUser.id,
-                              "partName": "404",
-                              "partQuantity": 404,
-                              "partUrl": partUrl,
-                              "vendor": "404",
-                              "needBy": "2020-04-04",
-                              "submittedOn": DateFormat.yMd().format(DateTime.now()).toString(),
-                              "partNumber": "404",
-                              "cost": 404,
-                              "totalCost": 404,
-                              "justification": "404"
-                            })).then((response) async {
-                              print(response.body);
-                              if (response.statusCode != 200) {
-                                html.window.alert(response.body);
-                              }
-                              else {
-                                router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
-                              }
+                            setState(() {
+                              loading = true;
+                            });
+                            await cycleApiKey().then((value) async {
+                              await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
+                                "id": prID,
+                                "isSheet": true,
+                                "userID": currUser.id,
+                                "partName": "404",
+                                "partQuantity": 404,
+                                "partUrl": partUrl,
+                                "vendor": "404",
+                                "needBy": "2020-04-04",
+                                "submittedOn": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                                "partNumber": "404",
+                                "cost": 404,
+                                "totalCost": 404,
+                                "justification": "404",
+                                "status": "pending"
+                              })).then((response) async {
+                                print(response.body);
+                                if (response.statusCode != 200) {
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  html.window.alert(response.body);
+                                }
+                                else {
+                                  await http.post(prDiscordUrl, headers: {"Content-Type": "application/json"}, body: jsonEncode({
+                                    "content": "<@${currUser.discordID}> your PR Sheet was recieved!\n<http://vcrobotics.net/#/purchase-request/view?id=${prID}>"
+                                  })).then((response) {
+                                    router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
+                                  });
+                                }
+                              });
                             });
                           },
+                        ),
+                      ),
+                      new Visibility(
+                        visible: loading,
+                        child: new HeartbeatProgressIndicator(
+                          child: new Image.asset(
+                            'images/wblogo.png',
+                            height: 15.0,
+                          ),
                         ),
                       ),
                       new Padding(padding: EdgeInsets.all(16.0),),

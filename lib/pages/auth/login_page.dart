@@ -98,7 +98,12 @@ class _LoginPageState extends State<LoginPage> {
             }
             else if (response.statusCode == 404) {
               print("USER NOT IN DB");
-              router.navigateTo(context, '/register', transition: TransitionType.fadeIn);
+              if (fb.auth().currentUser.email.contains("warriorlife.net")) {
+                router.navigateTo(context, '/register', transition: TransitionType.fadeIn);
+              }
+              else {
+                html.window.alert("You must use your warriorlife email to create a myWB Account!");
+              }
             }
           });
         } catch (error) {

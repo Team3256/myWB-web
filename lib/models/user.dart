@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 class User {
-  String id;
-  String firstName;
-  String lastName;
-  String email;
-  String phone;
-  int grade;
-  String role;
-  bool varsity;
-  String shirtSize;
-  String jacketSize;
-  String discordID;
-  String discordAuthToken;
+  String id = "";
+  String firstName = "";
+  String lastName = "";
+  String email = "";
+  String phone = "";
+  int grade = 404;
+  String role = "";
+  bool varsity = false;
+  String shirtSize = "";
+  String jacketSize = "";
+  String discordID = "";
+  String discordAuthToken = "";
 
   List<String> subteams = new List();
   List<String> perms = new List();

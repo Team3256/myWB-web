@@ -52,7 +52,7 @@ class _PurchaseRequestPageState extends State<PurchaseRequestPage> {
         await http.get("$dbHost/users/${prJson[i]["userID"]}", headers: {"Authentication": "Bearer $apiKey"}).then((response) async {
           var userJson = jsonDecode(response.body);
           setState(() {
-            if (!prJson[i]["approved"]) {
+            if (prJson[i]["status"] == "pending") {
               if (!prJson[i]["isSheet"]) {
                 pendingList.add(new DataRow(
                   onSelectChanged: (val) {
@@ -90,7 +90,7 @@ class _PurchaseRequestPageState extends State<PurchaseRequestPage> {
                 ));
               }
             }
-            else {
+            else if (prJson[i]["status"] == "approved") {
               if (!prJson[i]["isSheet"]) {
                 approvedList.add(new DataRow(
                   onSelectChanged: (val) {
@@ -111,6 +111,44 @@ class _PurchaseRequestPageState extends State<PurchaseRequestPage> {
               }
               else {
                 approvedList.add(new DataRow(
+                  onSelectChanged: (val) {
+                    router.navigateTo(context, '/purchase-request/view?id=${prJson[i]["id"]}', transition: TransitionType.fadeIn);
+                  },
+                  cells: [
+                    new DataCell(new Text(prJson[i]["submittedOn"].toString())),
+                    new DataCell(new Text(userJson["firstName"] + " " + userJson["lastName"])),
+                    new DataCell(new Text("PR Sheet")),
+                    new DataCell(new Text("")),
+                    new DataCell(new Text("")),
+                    new DataCell(new Text("")),
+                    new DataCell(new Text("")),
+                    new DataCell(new Text("")),
+                    new DataCell(new Text("")),
+                  ],
+                ));
+              }
+            }
+            else if (prJson[i]["status"] == "denied") {
+              if (!prJson[i]["isSheet"]) {
+                deniedList.add(new DataRow(
+                  onSelectChanged: (val) {
+                    router.navigateTo(context, '/purchase-request/view?id=${prJson[i]["id"]}', transition: TransitionType.fadeIn);
+                  },
+                  cells: [
+                    new DataCell(new Text(prJson[i]["submittedOn"].toString())),
+                    new DataCell(new Text(userJson["firstName"] + " " + userJson["lastName"])),
+                    new DataCell(new Text(prJson[i]["partName"].toString())),
+                    new DataCell(new Text(prJson[i]["partNumber"].toString())),
+                    new DataCell(new Text(prJson[i]["partQuantity"].toString())),
+                    new DataCell(new Text(prJson[i]["vendor"].toString())),
+                    new DataCell(new Text(prJson[i]["needBy"].toString())),
+                    new DataCell(new Text("\$" + prJson[i]["cost"].toString())),
+                    new DataCell(new Text("\$" + prJson[i]["totalCost"].toString())),
+                  ],
+                ));
+              }
+              else {
+                deniedList.add(new DataRow(
                   onSelectChanged: (val) {
                     router.navigateTo(context, '/purchase-request/view?id=${prJson[i]["id"]}', transition: TransitionType.fadeIn);
                   },
@@ -262,6 +300,42 @@ class _PurchaseRequestPageState extends State<PurchaseRequestPage> {
                         ),
                       ),
                       new Padding(padding: EdgeInsets.all(8.0),),
+                      new Padding(padding: EdgeInsets.all(8.0),),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.all(32.0),
+                          width: double.infinity,
+                          child: new Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              new Text("Denied", style: TextStyle(fontSize: 20.0)),
+                              new Padding(padding: EdgeInsets.all(4.0),),
+                              new Scrollbar(
+                                child: new SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: new DataTable(
+                                      columns: [
+                                        new DataColumn(label: new Text("Submitted On", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Author", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Part Name", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Part #", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Quantity", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Vendor", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Need By", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Cost", style: TextStyle(fontWeight: FontWeight.bold))),
+                                        new DataColumn(label: new Text("Total Cost", style: TextStyle(fontWeight: FontWeight.bold))),
+                                      ],
+                                      rows: deniedList
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

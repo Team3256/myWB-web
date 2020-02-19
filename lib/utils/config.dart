@@ -1,8 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase/firebase.dart' as fb;
 import 'package:mywb_web/models/version.dart';
 
-Version appVersion = new Version("0.1.0+1");
+Version appVersion = new Version("1.3.4+1");
 String appStatus = "";
 String appFull = "Version ${appVersion.toString()}";
 
@@ -11,7 +12,15 @@ final router = new Router();
 String dbHost = "http://24.4.73.109:8081/api";
 String authHost = "http://24.4.73.109:8082/api";
 
-String apiKey = "LzPyVSZOWw3DQC3EWO1";
+String prDiscordUrl = "https://discordapp.com/api/webhooks/633445431602315284/JCEk6xqZICaJNUbKk2K_2bItGziHBqWO71vNqkAcszYxVNA1MzfGMSenZ1UhCWwxfn3-";
+
+String apiKey = "";
+
+Future<void> cycleApiKey() async {
+  apiKey = fb.database().ref("tokens").push().key;
+  await fb.database().ref("tokens").child(apiKey).set(apiKey);
+//  await Future.delayed(const Duration(milliseconds: 100));
+}
 
 String appLegal = """
 MIT License

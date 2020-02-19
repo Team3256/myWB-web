@@ -21,50 +21,53 @@ class _HomeNavbarState extends State<HomeNavbar> {
   Widget build(BuildContext context) {
     return new Container(
       height: 85.0,
-      color: currCardColor,
+      color: mainColor,
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           new Container(
-            height: 50,
+            height: 40,
             width: 300,
-            child: new Text(
-              "WarriorBorgs 3256",
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, fontFamily: "Oswald"),
-              textAlign: TextAlign.center,
+//            color: Colors.greenAccent,
+            child: new Image.asset(
+              "images/warriorborgs.png",
+              fit: BoxFit.fitHeight,
             )
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               new FlatButton(
-                child: new Text("HOME"),
+                child: new Text("HOME", style: TextStyle(color: Colors.white)),
                 onPressed: () {
                   router.navigateTo(context, '/', transition: TransitionType.fadeIn);
                 },
               ),
               new FlatButton(
-                child: new Text("ABOUT"),
+                child: new Text("ABOUT", style: TextStyle(color: Colors.white)),
                 onPressed: () {
                 },
               ),
               new FlatButton(
-                child: new Text("TEAM"),
+                child: new Text("TEAM", style: TextStyle(color: Colors.white)),
                 onPressed: () {
+                  router.navigateTo(context, '/team', transition: TransitionType.fadeIn);
                 },
               ),
               new FlatButton(
-                child: new Text("STORE"),
+                child: new Text("STORE", style: TextStyle(color: Colors.white)),
                 onPressed: () {
+                  router.navigateTo(context, '/store', transition: TransitionType.fadeIn);
                 },
               ),
               new Padding(padding: EdgeInsets.all(4.0),),
               new Visibility(
                 visible: (!_localStorage.containsKey("userID")),
-                child: new RaisedButton(
-                  elevation: 0.0,
+                child: new OutlineButton(
+                  highlightElevation: 6.0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                  borderSide: BorderSide(color: Colors.grey),
                   child: new Text("LOGIN"),
                   textColor: Colors.white,
                   color: mainColor,

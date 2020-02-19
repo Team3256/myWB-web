@@ -50,17 +50,19 @@ class _RegisterDiscordPageState extends State<RegisterDiscordPage> {
               print("USER DISCORD ID: " + discordJson["id"].toString());
               currUser.discordAuthToken = token.toString();
               currUser.discordID = discordJson["id"].toString();
-              await http.put("$dbHost/users/${_localStorage["userID"]}", body: jsonEncode(currUser), headers: {HttpHeaders.contentTypeHeader: "application/json", "Authentication": "Bearer $apiKey"}).then((response) async {
-                print(response.body);
-                if (response.statusCode == 200) {
-                  print("SUCCESS");
-                  await Future.delayed(const Duration(seconds: 3));
-                  router.navigateTo(context, '/', transition: TransitionType.fadeIn);
-                }
-                else {
-                  print("UNKNOWN ERROR - SEE DB LOGS");
-                  html.window.alert(response.body);
-                }
+              await cycleApiKey().then((value) async {
+                await http.put("$dbHost/users/${_localStorage["userID"]}", body: jsonEncode(currUser), headers: {HttpHeaders.contentTypeHeader: "application/json", "Authentication": "Bearer $apiKey"}).then((response) async {
+                  print(response.body);
+                  if (response.statusCode == 200) {
+                    print("SUCCESS");
+                    await Future.delayed(const Duration(seconds: 3));
+                    router.navigateTo(context, '/', transition: TransitionType.fadeIn);
+                  }
+                  else {
+                    print("UNKNOWN ERROR - SEE DB LOGS");
+                    html.window.alert(response.body);
+                  }
+                });
               });
             });
           });

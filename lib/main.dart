@@ -10,6 +10,14 @@ import 'package:mywb_web/pages/not_found_page.dart';
 import 'package:mywb_web/pages/purchase_request/new_purchase_request_page.dart';
 import 'package:mywb_web/pages/purchase_request/purchase_request_page.dart';
 import 'package:mywb_web/pages/purchase_request/view_purchase_request.dart';
+import 'package:mywb_web/pages/store/store_cancel_page.dart';
+import 'package:mywb_web/pages/store/store_cart_page.dart';
+import 'package:mywb_web/pages/store/store_page.dart';
+import 'package:mywb_web/pages/store/store_redirect_page.dart';
+import 'package:mywb_web/pages/store/store_success_page.dart';
+import 'package:mywb_web/pages/store/store_temp.dart';
+import 'package:mywb_web/pages/store/store_view_page.dart';
+import 'package:mywb_web/pages/team/team_page.dart';
 import 'package:mywb_web/utils/config.dart';
 import 'package:mywb_web/utils/service_account.dart';
 import 'package:mywb_web/utils/theme.dart';
@@ -37,6 +45,31 @@ void main() {
   // HOME ROUTES
   router.define('/', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new HomePage();
+  }));
+
+  // TEAM ROUTES
+  router.define('/team', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new TeamPage();
+  }));
+
+  // STORE ROUTES
+  router.define('/store', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new StorePage();
+  }));
+  router.define('/store/view', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new StoreViewPage();
+  }));
+  router.define('/store/cart', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new StoreCartPage();
+  }));
+  router.define('/store/redirect', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new StoreRedirectPage();
+  }));
+  router.define('/store/checkout/success', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new StoreSuccessPage();
+  }));
+  router.define('/store/checkout/cancel', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new StoreCancelPage();
   }));
 
   // PR ROUTES

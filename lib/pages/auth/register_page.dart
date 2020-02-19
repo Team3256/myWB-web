@@ -287,20 +287,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         registerUser.jacketSize = jacketSize;
                         registerUser.discordID = "404";
                         registerUser.discordAuthToken = "404";
-                        await http.post("$dbHost/users", body: jsonEncode(registerUser), headers: {HttpHeaders.contentTypeHeader: "application/json", "Authentication": "Bearer $apiKey"}).then((response) {
-                          print(response.body);
-                          if (response.statusCode == 200) {
-                            print("SUCCESS");
-                            router.navigateTo(context, '/register/discord', transition: TransitionType.fadeIn);
-                          }
-                          else if (response.statusCode == 409) {
-                            print("USER ALREADY IN DB");
-                            html.window.alert(response.body);
-                          }
-                          else {
-                            print("UNKNOWN ERROR - SEE DB LOGS");
-                            html.window.alert(response.body);
-                          }
+                        await cycleApiKey().then((value) async {
+                          await http.post("$dbHost/users", body: jsonEncode(registerUser), headers: {HttpHeaders.contentTypeHeader: "application/json", "Authentication": "Bearer $apiKey"}).then((response) {
+                            print(response.body);
+                            if (response.statusCode == 200) {
+                              print("SUCCESS");
+                              router.navigateTo(context, '/register/discord', transition: TransitionType.fadeIn);
+                            }
+                            else if (response.statusCode == 409) {
+                              print("USER ALREADY IN DB");
+                              html.window.alert(response.body);
+                            }
+                            else {
+                              print("UNKNOWN ERROR - SEE DB LOGS");
+                              html.window.alert(response.body);
+                            }
+                          });
                         });
                       } catch (error) {
                         print(error);

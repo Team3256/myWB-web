@@ -11,12 +11,12 @@ import 'package:mywb_web/navbar/home_navbar.dart';
 import 'package:mywb_web/utils/config.dart';
 import 'package:mywb_web/utils/theme.dart';
 
-class HomePage extends StatefulWidget {
+class TeamPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _TeamPageState createState() => _TeamPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TeamPageState extends State<TeamPage> {
 
   final Storage _localStorage = html.window.localStorage;
 
@@ -66,36 +66,12 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text("Purchase Requests", style: TextStyle(fontSize: 20.0)),
+                new Text("Purchase Request", style: TextStyle(fontSize: 20.0)),
               ],
             ),
           ),
         ),
       ));
-      widgetList.add(new Padding(padding: EdgeInsets.all(8.0),));
-      widgetList.add(new Card(
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
-        color: currCardColor,
-        child: new InkWell(
-          onTap: () {
-            router.navigateTo(context, '/', transition: TransitionType.fadeIn);
-          },
-          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-          child: Container(
-            padding: EdgeInsets.only(top: 16, bottom: 16, right: 16, left: 16),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text("Scouting", style: TextStyle(fontSize: 20.0)),
-              ],
-            ),
-          ),
-        ),
-      ));
-      widgetList.add(new Padding(padding: EdgeInsets.all(8.0),));
-      widgetList.add(new Text(appVersion.toString()));
     }
     else {
       widgetList.add(new Padding(padding: EdgeInsets.all(16.0),));
@@ -135,7 +111,26 @@ class _HomePageState extends State<HomePage> {
               width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
               child: new SingleChildScrollView(
                 child: new Column(
-                  children: widgetList
+                    children: [
+                      new Padding(padding: EdgeInsets.all(16.0)),
+                      new Image.network(
+                        "http://vcrobotics.net/old/Barnes%20&%20Nobles/bruhmartin.png",
+                        width: 400,
+                        height: 300,
+                        fit: BoxFit.contain,
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Text("Mr. President", style: TextStyle(fontSize: 25),),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Image.network(
+                        "http://vcrobotics.net/old/Barnes & Nobles/Barnes&Nobles_3403.JPG",
+                        width: 400,
+                        height: 300,
+                        fit: BoxFit.contain,
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Text("Vice President", style: TextStyle(fontSize: 25),)
+                    ]
                 ),
               ),
             )

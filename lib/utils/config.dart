@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:mywb_web/models/version.dart';
 
-Version appVersion = new Version("1.3.4+1");
+Version appVersion = new Version("1.4.0+1");
 String appStatus = "";
 String appFull = "Version ${appVersion.toString()}";
 

@@ -72,7 +72,7 @@ class _RegisterDiscordPageState extends State<RegisterDiscordPage> {
           setState(() {
             displayWidget = new Text("You must link your Discord account with myWB!\n\nSee a Systems person if you think this is an error.");
           });
-          await Future.delayed(const Duration(seconds: 3));
+          await Future.delayed(const Duration(seconds: 1));
           router.navigateTo(context, '/register/discord', transition: TransitionType.fadeIn);
         }
       }

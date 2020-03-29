@@ -770,39 +770,49 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
                             setState(() {
                               loading = true;
                             });
-                            await cycleApiKey().then((value) async {
-                              await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
-                                "id": prID,
-                                "isSheet": false,
-                                "userID": currUser.id,
-                                "partName": partName,
-                                "partQuantity": partQuantity,
-                                "partUrl": partUrl,
-                                "vendor": vendor,
-                                "needBy": DateFormat("yyyy-MM-dd").format(needBy),
-                                "submittedOn": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-                                "partNumber": partNumber,
-                                "cost": cost,
-                                "totalCost": double.tryParse((cost * partQuantity).toStringAsFixed(2)),
-                                "justification": justification,
-                                "status": "pending"
-                              })).then((response) async {
-                                print(response.body);
-                                if (response.statusCode != 200) {
-                                  html.window.alert(response.body);
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                }
-                                else {
-                                  await http.post(prDiscordUrl, headers: {"Content-Type": "application/json"}, body: jsonEncode({
-                                    "content": "<@${currUser.discordID}> your purchase request for $partName was recieved!\n<http://vcrobotics.net/#/purchase-request/view?id=${prID}>"
-                                  })).then((response) {
-                                    router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
-                                  });
-                                }
+                            if (fb.auth().currentUser != null) {
+                              await cycleApiKey().then((value) async {
+                                await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
+                                  "id": prID,
+                                  "isSheet": false,
+                                  "userID": currUser.id,
+                                  "partName": partName,
+                                  "partQuantity": partQuantity,
+                                  "partUrl": partUrl,
+                                  "vendor": vendor,
+                                  "needBy": DateFormat("yyyy-MM-dd").format(needBy),
+                                  "submittedOn": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                                  "partNumber": partNumber,
+                                  "cost": cost,
+                                  "totalCost": double.tryParse((cost * partQuantity).toStringAsFixed(2)),
+                                  "justification": justification,
+                                  "status": "pending"
+                                })).then((response) async {
+                                  print(response.body);
+                                  if (response.statusCode != 200) {
+                                    html.window.alert(response.body);
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  }
+                                  else {
+                                    await http.post(prDiscordUrl, headers: {"Content-Type": "application/json"}, body: jsonEncode({
+                                      "content": "<@${currUser.discordID}> your purchase request for $partName was recieved!\n<http://vcrobotics.net/#/purchase-request/view?id=${prID}>"
+                                    })).then((response) {
+                                      router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
+                                    });
+                                  }
+                                });
                               });
-                            });
+                            }
+                            else {
+                              html.window.alert("You are not logged in! Please try logging in again.");
+                              _localStorage.remove("userID");
+                              html.window.location.reload();
+                              setState(() {
+                                loading = false;
+                              });
+                            }
                           },
                         ),
                       ),
@@ -819,39 +829,49 @@ class _NewPurchaseRequestPageState extends State<NewPurchaseRequestPage> {
                             setState(() {
                               loading = true;
                             });
-                            await cycleApiKey().then((value) async {
-                              await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
-                                "id": prID,
-                                "isSheet": true,
-                                "userID": currUser.id,
-                                "partName": "404",
-                                "partQuantity": 404,
-                                "partUrl": partUrl,
-                                "vendor": "404",
-                                "needBy": "2020-04-04",
-                                "submittedOn": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-                                "partNumber": "404",
-                                "cost": 404,
-                                "totalCost": 404,
-                                "justification": "404",
-                                "status": "pending"
-                              })).then((response) async {
-                                print(response.body);
-                                if (response.statusCode != 200) {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  html.window.alert(response.body);
-                                }
-                                else {
-                                  await http.post(prDiscordUrl, headers: {"Content-Type": "application/json"}, body: jsonEncode({
-                                    "content": "<@${currUser.discordID}> your PR Sheet was recieved!\n<http://vcrobotics.net/#/purchase-request/view?id=${prID}>"
-                                  })).then((response) {
-                                    router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
-                                  });
-                                }
+                            if (fb.auth().currentUser != null) {
+                              await cycleApiKey().then((value) async {
+                                await http.post("$dbHost/purchase-requests", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
+                                  "id": prID,
+                                  "isSheet": true,
+                                  "userID": currUser.id,
+                                  "partName": "404",
+                                  "partQuantity": 404,
+                                  "partUrl": partUrl,
+                                  "vendor": "404",
+                                  "needBy": "2020-04-04",
+                                  "submittedOn": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                                  "partNumber": "404",
+                                  "cost": 404,
+                                  "totalCost": 404,
+                                  "justification": "404",
+                                  "status": "pending"
+                                })).then((response) async {
+                                  print(response.body);
+                                  if (response.statusCode != 200) {
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    html.window.alert(response.body);
+                                  }
+                                  else {
+                                    await http.post(prDiscordUrl, headers: {"Content-Type": "application/json"}, body: jsonEncode({
+                                      "content": "<@${currUser.discordID}> your PR Sheet was recieved!\n<http://vcrobotics.net/#/purchase-request/view?id=${prID}>"
+                                    })).then((response) {
+                                      router.navigateTo(context, '/purchase-request/view?id=$prID', transition: TransitionType.fadeIn);
+                                    });
+                                  }
+                                });
                               });
-                            });
+                            }
+                            else {
+                              html.window.alert("You are not logged in! Please try logging in again.");
+                              _localStorage.remove("userID");
+                              html.window.location.reload();
+                              setState(() {
+                                loading = false;
+                              });
+                            }
                           },
                         ),
                       ),

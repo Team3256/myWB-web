@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'package:mywb_web/models/user.dart';
+import 'package:mywb_web/navbar/home_drawer.dart';
 import 'package:mywb_web/navbar/home_navbar.dart';
 import 'package:mywb_web/utils/config.dart';
 import 'package:mywb_web/utils/theme.dart';
@@ -107,30 +108,413 @@ class _TeamPageState extends State<TeamPage> {
         body: new Column(
           children: <Widget>[
             new HomeNavbar(),
-            new Container(
-              width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
-              child: new SingleChildScrollView(
-                child: new Column(
-                    children: [
-                      new Padding(padding: EdgeInsets.all(16.0)),
-                      new Image.network(
-                        "http://vcrobotics.net/old/Barnes%20&%20Nobles/bruhmartin.png",
-                        width: 400,
-                        height: 300,
-                        fit: BoxFit.contain,
-                      ),
-                      new Padding(padding: EdgeInsets.all(8.0)),
-                      new Text("Mr. President", style: TextStyle(fontSize: 25),),
-                      new Padding(padding: EdgeInsets.all(8.0)),
-                      new Image.network(
-                        "http://vcrobotics.net/old/Barnes & Nobles/Barnes&Nobles_3403.JPG",
-                        width: 400,
-                        height: 300,
-                        fit: BoxFit.contain,
-                      ),
-                      new Padding(padding: EdgeInsets.all(8.0)),
-                      new Text("Vice President", style: TextStyle(fontSize: 25),)
-                    ]
+            new Expanded(
+              child: new Container(
+                width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
+                child: new SingleChildScrollView(
+                  child: new Column(
+                      children: <Widget>[
+                        new Padding(padding: EdgeInsets.all(16.0)),
+                        new Text("Executive Team", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
+                        new Padding(padding: EdgeInsets.all(8.0)),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_martin.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Martin Liu", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("President", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_kashyap.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Kashyap Chaturvedula", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Vice President", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        new Padding(padding: EdgeInsets.all(8.0)),
+                        new Text("Leadership Team", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
+                        new Padding(padding: EdgeInsets.all(8.0)),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_kashyap.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Kashyap Chaturvedula", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Design", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_martin.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Martin Liu", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("CAD", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_neel.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Neel Tripathi", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Prototyping", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        new Padding(padding: EdgeInsets.all(8.0)),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_chanel.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Chanel Lim", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Assembly", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_albert.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Albert Zhao", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Electrical", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_alex.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Alex Wan", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Fabrication", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        new Padding(padding: EdgeInsets.all(8.0)),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_nic.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Nic Pham", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Software Teleop", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_rohan.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Rohan Viswanathan", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Software Auto", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_sam.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Samuel Stephen", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Systems", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        new Padding(padding: EdgeInsets.all(8.0)),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_flaumbert.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Flaumbert Ruas", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Logistics", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_kayla.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Kayla Kelsall", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Business", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            new Card(
+                              color: currCardColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                              elevation: 0.0,
+                              child: new Container(
+                                padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                                child: new Column(
+                                  children: <Widget>[
+                                    new ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(150)),
+                                      child: new Image.network(
+                                        "http://vcrobotics.net/images/frc2020/lead_parth.png",
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Parth Kasmalkar", style: TextStyle(fontSize: 25),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                    new Text("Scouting", style: TextStyle(fontSize: 20),),
+                                    new Padding(padding: EdgeInsets.all(4.0)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        new Padding(padding: EdgeInsets.all(16.0)),
+                      ]
+                  ),
                 ),
               ),
             )
@@ -140,11 +524,428 @@ class _TeamPageState extends State<TeamPage> {
     }
     else {
       return new Scaffold(
-        body: new SingleChildScrollView(
-          child: new Column(
-            children: <Widget>[
-              // TODO: App store download links
-            ],
+        appBar: new AppBar(
+          title: new Text("Team", style: TextStyle(fontFamily: "Oswald"),),
+          elevation: 0.0,
+          backgroundColor: mainColor,
+        ),
+        drawer: new HomeDrawer(),
+        backgroundColor: currBackgroundColor,
+        body: new Container(
+          width: MediaQuery.of(context).size.width - 16,
+          child: new SingleChildScrollView(
+            child: new Column(
+                children: <Widget>[
+                  new Padding(padding: EdgeInsets.all(16.0)),
+                  new Text("Executive Team", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
+                  new Padding(padding: EdgeInsets.all(8.0)),
+                  new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_martin.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Martin Liu", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("President", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_kashyap.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Kashyap Chaturvedula", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Vice President", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.all(8.0)),
+                  new Text("Leadership Team", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
+                  new Padding(padding: EdgeInsets.all(8.0)),
+                  new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_kashyap.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Kashyap Chaturvedula", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Design", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_martin.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Martin Liu", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("CAD", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_neel.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Neel Tripathi", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Prototyping", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.all(8.0)),
+                  new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_chanel.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Chanel Lim", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Assembly", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_albert.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Albert Zhao", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Electrical", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_alex.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Alex Wan", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Fabrication", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.all(8.0)),
+                  new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_nic.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Nic Pham", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Software Teleop", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_rohan.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Rohan Viswanathan", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Software Auto", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_sam.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Samuel Stephen", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Systems", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.all(8.0)),
+                  new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_flaumbert.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Flaumbert Ruas", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Logistics", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_kayla.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Kayla Kelsall", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Business", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      new Padding(padding: EdgeInsets.all(8.0)),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.only(top: 16, bottom: 16, right: 32, left: 32),
+                          child: new Column(
+                            children: <Widget>[
+                              new ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(150)),
+                                child: new Image.network(
+                                  "http://vcrobotics.net/images/frc2020/lead_parth.png",
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Parth Kasmalkar", style: TextStyle(fontSize: 25),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                              new Text("Scouting", style: TextStyle(fontSize: 20),),
+                              new Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  new Padding(padding: EdgeInsets.all(16.0)),
+                ]
+            ),
           ),
         ),
       );

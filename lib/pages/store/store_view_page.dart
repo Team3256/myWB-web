@@ -9,6 +9,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:intl/intl.dart';
 import 'package:mywb_web/models/user.dart';
+import 'package:mywb_web/navbar/home_drawer.dart';
 import 'package:mywb_web/navbar/home_navbar.dart';
 import 'dart:js' as js;
 import 'package:http/http.dart' as http;
@@ -364,208 +365,414 @@ class _StoreViewPageState extends State<StoreViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: currBackgroundColor,
-      body: new Column(
-        children: <Widget>[
-          new HomeNavbar(),
-          new Expanded(
-            child: new Container(
-              width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
-              child: new SingleChildScrollView(
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Padding(padding: EdgeInsets.all(16.0),),
-                    new FlatButton(
-                      child: new Text("Back to Store", style: TextStyle(color: mainColor),),
-                      onPressed: () {
-                        router.navigateTo(context, '/store', transition: TransitionType.fadeIn);
-                      },
-                    ),
-                    new Card(
-                      color: currCardColor,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-                      elevation: 0.0,
-                      child: new Container(
-                        padding: EdgeInsets.all(32.0),
-                        width: double.infinity,
-                        child: new Column(
-                          children: [
-                            new Text(productName, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
-                            new Padding(padding: EdgeInsets.all(16.0),),
-                            new Text(
-                              productDescription,
-                              style: new TextStyle(color: Colors.black),
-                            ),
-                          ],
+    if (MediaQuery.of(context).size.width > 800) {
+      return new Scaffold(
+        backgroundColor: currBackgroundColor,
+        body: new Column(
+          children: <Widget>[
+            new HomeNavbar(),
+            new Expanded(
+              child: new Container(
+                width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
+                child: new SingleChildScrollView(
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Padding(padding: EdgeInsets.all(16.0),),
+                      new FlatButton(
+                        child: new Text("Back to Store", style: TextStyle(color: mainColor),),
+                        onPressed: () {
+                          router.navigateTo(context, '/store', transition: TransitionType.fadeIn);
+                        },
+                      ),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.all(32.0),
+                          width: double.infinity,
+                          child: new Column(
+                            children: [
+                              new Text(productName, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
+                              new Padding(padding: EdgeInsets.all(16.0),),
+                              new Text(
+                                productDescription,
+                                style: new TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    new Padding(padding: EdgeInsets.all(8.0),),
-                    new Card(
-                      color: currCardColor,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-                      elevation: 0.0,
-                      child: new Container(
-                        padding: EdgeInsets.all(32.0),
-                        width: double.infinity,
-                        child: new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            new Container(
-                              height: 300,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: previewList
+                      new Padding(padding: EdgeInsets.all(8.0),),
+                      new Card(
+                        color: currCardColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                        elevation: 0.0,
+                        child: new Container(
+                          padding: EdgeInsets.all(32.0),
+                          width: double.infinity,
+                          child: new Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              new Container(
+                                height: 300,
+                                child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: previewList
+                                ),
                               ),
-                            ),
-                            new Padding(
-                              padding: EdgeInsets.all(16),
-                              child: new Text("\$${price.toDouble()*quantity / 100} – $size – $variant", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center)
-                            ),
-                            new Row(
-                              children: <Widget>[
-                                new IconButton(
-                                  icon: new Icon(Icons.remove_circle_outline),
-                                  color: quantity - 1 > 0 ? mainColor : Colors.grey,
-                                  onPressed: () {
-                                    setState(() {
-                                      if (quantity - 1 > 0) {
-                                        quantity--;
-                                      }
-                                    });
-                                  },
-                                ),
-                                new Padding(
-                                    padding: EdgeInsets.all(16),
-                                    child: new Text("$quantity", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center)
-                                ),
-                                new IconButton(
-                                  icon: new Icon(Icons.add_circle_outline),
-                                  color: mainColor,
-                                  onPressed: () {
-                                    setState(() {
-                                      quantity++;
-                                    });
-                                  },
-                                )
-                              ],
-                            ),
-                            new Padding(padding: EdgeInsets.all(8.0),),
-                            new Visibility(
-                              visible: sizeList.length != 0,
-                              child: new Container(
-                                height: 100,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: sizeList.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return new Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: new InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            size = sizeList[index];
-                                          });
-                                        },
-                                        borderRadius: BorderRadius.circular(16.0),
-                                        child: new Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(color: mainColor),
-                                              color: size == sizeList[index] ? mainColor : currCardColor,
-                                              borderRadius: BorderRadius.circular(16.0)
+                              new Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: new Text("\$${price.toDouble()*quantity / 100} – $size – $variant", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center)
+                              ),
+                              new Row(
+                                children: <Widget>[
+                                  new IconButton(
+                                    icon: new Icon(Icons.remove_circle_outline),
+                                    color: quantity - 1 > 0 ? mainColor : Colors.grey,
+                                    onPressed: () {
+                                      setState(() {
+                                        if (quantity - 1 > 0) {
+                                          quantity--;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  new Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: new Text("$quantity", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center)
+                                  ),
+                                  new IconButton(
+                                    icon: new Icon(Icons.add_circle_outline),
+                                    color: mainColor,
+                                    onPressed: () {
+                                      setState(() {
+                                        quantity++;
+                                      });
+                                    },
+                                  )
+                                ],
+                              ),
+                              new Padding(padding: EdgeInsets.all(8.0),),
+                              new Visibility(
+                                visible: sizeList.length != 0,
+                                child: new Container(
+                                  height: 100,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: sizeList.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return new Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: new InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              size = sizeList[index];
+                                            });
+                                          },
+                                          borderRadius: BorderRadius.circular(16.0),
+                                          child: new Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(color: mainColor),
+                                                color: size == sizeList[index] ? mainColor : currCardColor,
+                                                borderRadius: BorderRadius.circular(16.0)
+                                            ),
+                                            width: 100,
+                                            child: Center(child: new Text(sizeList[index], style: TextStyle(fontSize: 20, color: size == sizeList[index] ? Colors.white : currTextColor),)),
                                           ),
-                                          width: 100,
-                                          child: Center(child: new Text(sizeList[index], style: TextStyle(fontSize: 20, color: size == sizeList[index] ? Colors.white : currTextColor),)),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                            new Padding(padding: EdgeInsets.all(16.0),),
-                            new Visibility(
-                              visible: variantList.length != 0,
-                              child: new Container(
-                                height: 100,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: variantList.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return new Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: new InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            variant = variantList[index];
-                                          });
-                                        },
-                                        borderRadius: BorderRadius.circular(16.0),
-                                        child: new Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(color: mainColor),
-                                              color: variant == variantList[index] ? mainColor : currCardColor,
-                                              borderRadius: BorderRadius.circular(16.0)
+                              new Padding(padding: EdgeInsets.all(16.0),),
+                              new Visibility(
+                                visible: variantList.length != 0,
+                                child: new Container(
+                                  height: 100,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: variantList.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return new Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: new InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              variant = variantList[index];
+                                            });
+                                          },
+                                          borderRadius: BorderRadius.circular(16.0),
+                                          child: new Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(color: mainColor),
+                                                color: variant == variantList[index] ? mainColor : currCardColor,
+                                                borderRadius: BorderRadius.circular(16.0)
+                                            ),
+                                            width: 100,
+                                            child: Center(child: new Text(variantList[index], style: TextStyle(fontSize: 20, color: variant == variantList[index] ? Colors.white : currTextColor),)),
                                           ),
-                                          width: 100,
-                                          child: Center(child: new Text(variantList[index], style: TextStyle(fontSize: 20, color: variant == variantList[index] ? Colors.white : currTextColor),)),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    new Padding(padding: EdgeInsets.all(16.0),),
-                    new RaisedButton(
-                      child: new Text("Add to Cart", style: TextStyle(fontSize: 20.0)),
-                      elevation: 0.0,
-                      color: mainColor,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-                      onPressed: () async {
-                        if (fb.auth().currentUser != null) {
-                          String itemJsonString = '{"id": "$itemID", "productName": "$productName", "size": "$size", "variant": "$variant", "quantity": "$quantity", "cost": "$price"}';
-                          print(itemJsonString);
-                          await cycleApiKey().then((value) async {
-                            await http.post("$dbHost/store/cart", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
-                              "productID": itemID,
-                              "userID": currUser.id,
-                              "productName": productName,
-                              "size": size,
-                              "variant": variant,
-                              "quantity": quantity,
-                              "price": price
-                            })).then((response) async {
-                              print(response.body);
-                              if (response.statusCode == 200) {
-                                router.navigateTo(context, '/store/cart', transition: TransitionType.fadeIn);
-                              }
-                              else if (response.statusCode == 404) {
-                                html.window.alert(response.body);
-                              }
-                            });
-                          });
-                        }
-                        else {
-                          html.window.alert("You must be logged in to access the merch store!");
-                        }
-                      }
-                    ),
-                    new Padding(padding: EdgeInsets.all(16.0),),
-                  ],
+                      new Padding(padding: EdgeInsets.all(16.0),),
+                      new RaisedButton(
+                          child: new Text("Add to Cart", style: TextStyle(fontSize: 20.0)),
+                          elevation: 0.0,
+                          color: mainColor,
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                          onPressed: () async {
+                            if (fb.auth().currentUser != null) {
+                              String itemJsonString = '{"id": "$itemID", "productName": "$productName", "size": "$size", "variant": "$variant", "quantity": "$quantity", "cost": "$price"}';
+                              print(itemJsonString);
+                              await cycleApiKey().then((value) async {
+                                await http.post("$dbHost/store/cart", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
+                                  "productID": itemID,
+                                  "userID": currUser.id,
+                                  "productName": productName,
+                                  "size": size,
+                                  "variant": variant,
+                                  "quantity": quantity,
+                                  "price": price
+                                })).then((response) async {
+                                  print(response.body);
+                                  if (response.statusCode == 200) {
+                                    router.navigateTo(context, '/store/cart', transition: TransitionType.fadeIn);
+                                  }
+                                  else if (response.statusCode == 404) {
+                                    html.window.alert(response.body);
+                                  }
+                                });
+                              });
+                            }
+                            else {
+                              html.window.alert("You must be logged in to access the merch store!");
+                            }
+                          }
+                      ),
+                      new Padding(padding: EdgeInsets.all(16.0),),
+                    ],
+                  ),
                 ),
               ),
+            )
+          ],
+        ),
+      );
+    }
+    else {
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Details", style: TextStyle(fontFamily: "Oswald"),),
+          elevation: 0.0,
+          backgroundColor: mainColor,
+        ),
+        drawer: new HomeDrawer(),
+        backgroundColor: currBackgroundColor,
+        body: new Container(
+          padding: EdgeInsets.all(16),
+          child: new SingleChildScrollView(
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Padding(padding: EdgeInsets.all(16.0),),
+                new FlatButton(
+                  child: new Text("Back to Store", style: TextStyle(color: mainColor),),
+                  onPressed: () {
+                    router.navigateTo(context, '/store', transition: TransitionType.fadeIn);
+                  },
+                ),
+                new Card(
+                  color: currCardColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                  elevation: 0.0,
+                  child: new Container(
+                    padding: EdgeInsets.all(32.0),
+                    width: double.infinity,
+                    child: new Column(
+                      children: [
+                        new Text(productName, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
+                        new Padding(padding: EdgeInsets.all(16.0),),
+                        new Text(
+                          productDescription,
+                          style: new TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                new Padding(padding: EdgeInsets.all(8.0),),
+                new Card(
+                  color: currCardColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                  elevation: 0.0,
+                  child: new Container(
+                    padding: EdgeInsets.all(32.0),
+                    width: double.infinity,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Container(
+                          height: 300,
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: previewList
+                          ),
+                        ),
+                        new Padding(
+                            padding: EdgeInsets.all(16),
+                            child: new Text("\$${price.toDouble()*quantity / 100} – $size – $variant", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center)
+                        ),
+                        new Row(
+                          children: <Widget>[
+                            new IconButton(
+                              icon: new Icon(Icons.remove_circle_outline),
+                              color: quantity - 1 > 0 ? mainColor : Colors.grey,
+                              onPressed: () {
+                                setState(() {
+                                  if (quantity - 1 > 0) {
+                                    quantity--;
+                                  }
+                                });
+                              },
+                            ),
+                            new Padding(
+                                padding: EdgeInsets.all(16),
+                                child: new Text("$quantity", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center)
+                            ),
+                            new IconButton(
+                              icon: new Icon(Icons.add_circle_outline),
+                              color: mainColor,
+                              onPressed: () {
+                                setState(() {
+                                  quantity++;
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                        new Padding(padding: EdgeInsets.all(8.0),),
+                        new Visibility(
+                          visible: sizeList.length != 0,
+                          child: new Container(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: sizeList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return new Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: new InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        size = sizeList[index];
+                                      });
+                                    },
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: new Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: mainColor),
+                                          color: size == sizeList[index] ? mainColor : currCardColor,
+                                          borderRadius: BorderRadius.circular(16.0)
+                                      ),
+                                      width: 100,
+                                      child: Center(child: new Text(sizeList[index], style: TextStyle(fontSize: 20, color: size == sizeList[index] ? Colors.white : currTextColor),)),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        new Padding(padding: EdgeInsets.all(16.0),),
+                        new Visibility(
+                          visible: variantList.length != 0,
+                          child: new Container(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: variantList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return new Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: new InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        variant = variantList[index];
+                                      });
+                                    },
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: new Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: mainColor),
+                                          color: variant == variantList[index] ? mainColor : currCardColor,
+                                          borderRadius: BorderRadius.circular(16.0)
+                                      ),
+                                      width: 100,
+                                      child: Center(child: new Text(variantList[index], style: TextStyle(fontSize: 20, color: variant == variantList[index] ? Colors.white : currTextColor),)),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                new Padding(padding: EdgeInsets.all(16.0),),
+                new RaisedButton(
+                    child: new Text("Add to Cart", style: TextStyle(fontSize: 20.0)),
+                    elevation: 0.0,
+                    color: mainColor,
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                    onPressed: () async {
+                      if (fb.auth().currentUser != null) {
+                        String itemJsonString = '{"id": "$itemID", "productName": "$productName", "size": "$size", "variant": "$variant", "quantity": "$quantity", "cost": "$price"}';
+                        print(itemJsonString);
+                        await cycleApiKey().then((value) async {
+                          await http.post("$dbHost/store/cart", headers: {"Authentication": "Bearer $apiKey"}, body: jsonEncode({
+                            "productID": itemID,
+                            "userID": currUser.id,
+                            "productName": productName,
+                            "size": size,
+                            "variant": variant,
+                            "quantity": quantity,
+                            "price": price
+                          })).then((response) async {
+                            print(response.body);
+                            if (response.statusCode == 200) {
+                              router.navigateTo(context, '/store/cart', transition: TransitionType.fadeIn);
+                            }
+                            else if (response.statusCode == 404) {
+                              html.window.alert(response.body);
+                            }
+                          });
+                        });
+                      }
+                      else {
+                        html.window.alert("You must be logged in to access the merch store!");
+                      }
+                    }
+                ),
+                new Padding(padding: EdgeInsets.all(16.0),),
+              ],
             ),
-          )
-        ],
-      ),
-    );
+          ),
+        ),
+      );
+    }
   }
 }

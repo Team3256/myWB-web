@@ -1,7 +1,7 @@
 
 
 function checkout(sessionID) {
-    var stripe = Stripe('pk_test_6tj0TKnO1CB25QADQxF2nmG300IzENzaFY');
+    var stripe = Stripe('pk_live_HS7bIItiVMDivNsIGkggKkDs002yjz9K4b');
 
     stripe.redirectToCheckout({
         // Make the id field from the Checkout Session creation API response

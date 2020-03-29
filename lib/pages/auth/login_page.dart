@@ -173,9 +173,6 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: "Enter your email"
                     ),
                     onChanged: emailField,
-                    onSubmitted: (input) {
-                      login();
-                    },
                     autocorrect: false,
                     keyboardType: TextInputType.emailAddress,
                     textCapitalization: TextCapitalization.none,
@@ -187,9 +184,6 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: "Enter your password"
                     ),
                     onChanged: passwordField,
-                    onSubmitted: (input) {
-                      login();
-                    },
                     autocorrect: false,
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.none,

@@ -15,10 +15,11 @@
   <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-storage.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
-  <script src="main.dart.js?version=1-3-4" type="application/javascript"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjkrmahY8cj9U62yhJztSdzMxA3mkM3Z8"></script>
+  <script src="main.dart.js?version=1-4-0" type="application/javascript"></script>
   <script>
     function checkout(sessionID) {
-      var stripe = Stripe('pk_test_6tj0TKnO1CB25QADQxF2nmG300IzENzaFY');
+      var stripe = Stripe('pk_live_HS7bIItiVMDivNsIGkggKkDs002yjz9K4b');
 
       stripe.redirectToCheckout({
         // Make the id field from the Checkout Session creation API response

@@ -2,9 +2,12 @@ import 'package:firebase/firebase.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mywb_web/pages/events/attendance_page.dart';
 import 'package:mywb_web/pages/auth/login_page.dart';
 import 'package:mywb_web/pages/auth/register_discord_page.dart';
 import 'package:mywb_web/pages/auth/register_page.dart';
+import 'package:mywb_web/pages/events/events_attendance_page.dart';
+import 'package:mywb_web/pages/events/events_page.dart';
 import 'package:mywb_web/pages/home/home_page.dart';
 import 'package:mywb_web/pages/not_found_page.dart';
 import 'package:mywb_web/pages/purchase_request/new_purchase_request_page.dart';
@@ -45,6 +48,19 @@ void main() {
   // HOME ROUTES
   router.define('/', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
     return new HomePage();
+  }));
+
+  // EVENT ROUTES
+  router.define('/events', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new EventsPage();
+  }));
+  router.define('/events/attendance', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new EventsAttendancePage();
+  }));
+
+  // ATTENDANCE ROUTES
+  router.define('/attendance', handler: new Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+    return new AttendancePage();
   }));
 
   // TEAM ROUTES

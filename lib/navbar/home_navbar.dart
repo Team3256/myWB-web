@@ -20,18 +20,18 @@ class _HomeNavbarState extends State<HomeNavbar> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      height: 85.0,
+      height: 100.0,
       color: mainColor,
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           new Container(
-            height: 40,
+//            height: 100,
             width: 300,
 //            color: Colors.greenAccent,
             child: new Image.asset(
-              "images/warriorborgs.png",
+              "images/WB_Website_Logo.png",
               fit: BoxFit.fitHeight,
             )
           ),
@@ -47,6 +47,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
               new FlatButton(
                 child: new Text("ABOUT", style: TextStyle(color: Colors.white)),
                 onPressed: () {
+                  router.navigateTo(context, '/about', transition: TransitionType.fadeIn);
                 },
               ),
               new FlatButton(

@@ -17,9 +17,9 @@ class User {
   List<String> subteams = new List();
   List<String> perms = new List();
 
-  User.plain();
+  User();
 
-  User(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     firstName = json["firstName"];
     lastName = json["lastName"];

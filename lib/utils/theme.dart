@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 final mainColor = Color(0xFF014F8F);
 
@@ -22,5 +24,15 @@ var currDividerColor = lightDividerColor;
 ThemeData mainTheme = new ThemeData(
   accentColor: mainColor,
   primaryColor: mainColor,
-  fontFamily: "Roboto"
+  fontFamily: "WB Sans",
+  buttonTheme: ButtonThemeData(
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+    padding: EdgeInsets.only(left: 32, top: 16, bottom: 16, right: 32),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+  ),
+  cardTheme: CardTheme(
+    color: currCardColor,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  )
 );

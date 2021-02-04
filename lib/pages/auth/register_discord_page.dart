@@ -45,7 +45,7 @@ class _RegisterDiscordPageState extends State<RegisterDiscordPage> {
             });
             await http.get("$dbHost/users/${_localStorage["userID"]}", headers: {"Authentication": "Bearer $apiKey"}).then((response) async {
               print(response.body);
-              User currUser = User(jsonDecode(response.body));
+              User currUser = User.fromJson(jsonDecode(response.body));
               print("TOKEN: " + token.toString());
               print("USER DISCORD ID: " + discordJson["id"].toString());
               currUser.discordAuthToken = token.toString();

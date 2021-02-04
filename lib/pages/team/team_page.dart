@@ -29,7 +29,7 @@ class _TeamPageState extends State<TeamPage> {
     if (_localStorage.containsKey("userID")) {
       await http.get("$dbHost/users/${_localStorage["userID"]}", headers: {"Authentication": "Bearer $apiKey"}).then((response) async {
         print(response.body);
-        currUser = new User(jsonDecode(response.body));
+        currUser = new User.fromJson(jsonDecode(response.body));
         if (response.statusCode == 200) {
           var userJson = jsonDecode(response.body);
           if (userJson["discordID"] == "404" || userJson["discordAuthToken"] == "404") {

@@ -50,7 +50,7 @@ class _StorePageState extends State<StorePage> {
         print(response.body);
         if (response.statusCode == 200) {
           setState(() {
-            currUser = new User(jsonDecode(response.body));
+            currUser = new User.fromJson(jsonDecode(response.body));
           });
         }
         else if (response.statusCode == 404) {

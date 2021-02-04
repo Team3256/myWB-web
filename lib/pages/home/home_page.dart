@@ -9,10 +9,12 @@ import 'package:http/http.dart' as http;
 import 'package:mywb_web/models/post.dart';
 import 'package:mywb_web/models/user.dart';
 import 'package:mywb_web/navbar/home_drawer.dart';
+import 'package:mywb_web/navbar/home_footer.dart';
 import 'package:mywb_web/navbar/home_navbar.dart';
 import 'package:mywb_web/utils/config.dart';
 import 'package:mywb_web/utils/theme.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,8 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   String overlayText = "WE ARE THE WARRIORBORGS";
 
-  User currUser = new User.plain();
-
   List<Widget> widgetList = new List();
   List<Post> postList = new List();
 
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       await http.get("$dbHost/users/${_localStorage["userID"]}", headers: {"Authentication": "Bearer $apiKey"}).then((response) async {
         print(response.body);
         setState(() {
-          currUser = new User(jsonDecode(response.body));
+          currUser = new User.fromJson(jsonDecode(response.body));
           populateHomePage();
         });
         if (response.statusCode == 200) {
@@ -57,15 +57,6 @@ class _HomePageState extends State<HomePage> {
         }
       });
     }
-  }
-
-  Future<void> playVid() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    print("Play Vid");
-    setState(() {
-      _controller.setLooping(true);
-      _controller.play();
-    });
   }
 
   Future<void> populateHomePage() async {
@@ -206,9 +197,18 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     checkDiscord();
     populateHomePage();
-    _controller = VideoPlayerController.network('https://dl.dropboxusercontent.com/s/cao2gz57g1v0ch1/output.mp4?dl=0');
+    _controller = VideoPlayerController.network('https://vcrobotics.net/videos/FRC%202019.mp4');
     _controller.initialize().then((_) => setState(() {}));
     _controller.setLooping(true);
+    _controller.setVolume(0.0);
+    _controller.play();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -216,29 +216,6 @@ class _HomePageState extends State<HomePage> {
     if (MediaQuery.of(context).size.width > 800) {
       return new Scaffold(
         backgroundColor: currBackgroundColor,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            setState(() {
-              _controller.value.isPlaying
-                  ? _controller.pause()
-                  : _controller.play();
-            });
-            if (_controller.value.isPlaying) {
-              await Future.delayed(const Duration(seconds: 3));
-              setState(() {
-                overlayText = "";
-              });
-            }
-            else {
-              setState(() {
-                overlayText = "WE ARE THE WARRIORBORGS";
-              });
-            }
-          },
-          child: Icon(
-            _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-          ),
-        ),
         body: new Column(
           children: <Widget>[
             new HomeNavbar(),
@@ -248,36 +225,249 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     new Container(
                       padding: EdgeInsets.all(16),
-                      width: (MediaQuery.of(context).size.width > 1300) ? 1100 : MediaQuery.of(context).size.width - 50,
-//                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 300,
                       child: _controller.value.initialized ? new ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                          child: ClipRect(
-                            child: new Stack(
-                              children: <Widget>[
-                                AspectRatio(
-                                  aspectRatio: _controller.value.aspectRatio,
-                                  child: VideoPlayer(_controller),
+                          child: new Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              SizedBox.expand(
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: SizedBox(
+                                    width: _controller.value.size?.width ?? 0,
+                                    height: _controller.value.size?.height ?? 0,
+                                    child: VideoPlayer(_controller),
+                                  ),
                                 ),
-                                new AspectRatio(aspectRatio: _controller.value.aspectRatio, child: Center(child: new Text(overlayText, style: TextStyle(fontFamily: "Oswald", fontSize: 50, color: Colors.white),)))
-                              ],
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                color: mainColor.withOpacity(0.3),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(32),
+                                child: new Text("We are the WarriorBorgs.", style: TextStyle(fontSize: 65, color: Colors.white),)
+                              )
+                            ],
+                          )
+                      ) : ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        child: Container(
+                          color: Colors.black,
+                          child: Center(
+                            child: new Image.asset(
+                              'images/WB_Loading.gif',
+                              height: 100,
+                            ),
+                          ),
+                        ),
+                      )
+                    ),
+                    new Container(
+                      width: (MediaQuery.of(context).size.width > 1200) ? 1100 : MediaQuery.of(context).size.width - 100,
+                      child: new SingleChildScrollView(
+                        child: new Column(
+                          children: [
+                            new Padding(padding: EdgeInsets.all(32),),
+                            Center(child: new Text("We are an FRC Team located at Valley Christian High School.", style: TextStyle(fontSize: 40, color: mainColor), textAlign: TextAlign.center,)),
+                            new Padding(padding: EdgeInsets.all(16),),
+                            new Container(
+                              width: double.infinity,
+                              child: new Wrap(
+                                alignment: WrapAlignment.spaceEvenly,
+                                children: [
+                                  new Container(
+                                    child: new Column(
+                                      children: [
+                                        new Text("47", style: TextStyle(fontSize: 70, color: mainColor),),
+                                        new Padding(padding: EdgeInsets.all(6),),
+                                        new Text("Members", style: TextStyle(fontSize: 25),),
+                                      ],
+                                    ),
+                                  ),
+                                  new Container(
+                                    child: new Column(
+                                      children: [
+                                        new Text("42", style: TextStyle(fontSize: 70, color: mainColor),),
+                                        new Padding(padding: EdgeInsets.all(6),),
+                                        new Text("Competitions", style: TextStyle(fontSize: 25),),
+                                      ],
+                                    ),
+                                  ),
+                                  new Container(
+                                    child: new Column(
+                                      children: [
+                                        new Text("12", style: TextStyle(fontSize: 70, color: mainColor),),
+                                        new Padding(padding: EdgeInsets.all(6),),
+                                        new Text("Years", style: TextStyle(fontSize: 25),),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ]
+                        ),
+                      ),
+                    ),
+                    new Padding(padding: EdgeInsets.all(32),),
+                    new Container(
+                      padding: EdgeInsets.all(64),
+                      width: MediaQuery.of(context).size.width - 64,
+                      child: new Row(
+                        children: [
+                          new Expanded(
+                            child: Center(
+                              child: new Container(
+                                padding: EdgeInsets.all(32),
+                                  child: new Image.asset(
+                                    "images/WB_Logo_Blue.png",
+                                    fit: BoxFit.contain,
+                                    height: 150,
+                                    width: 450,
+                                  )
+                              ),
+                            ),
+                          ),
+                          new Expanded(
+                            child: Center(
+                              child: new Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    new Text("WARRIORBORGS", style: TextStyle(fontFamily: "Bebas Neue", fontSize: 40),),
+                                    new Padding(padding: EdgeInsets.all(8),),
+                                    new Text(
+                                        "As a continuously learning community, We, the WarriorBorgs, seek to conceive creative and innovative methods to spread the FIRST message of STEM through not only the building of robots, but also the building of teams.",
+                                        style: TextStyle(fontSize: 20)
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(8),),
+                                    new RaisedButton(
+                                      onPressed: () {
+                                        router.navigateTo(context, "/about", transition: TransitionType.fadeIn);
+                                      },
+                                      elevation: 0,
+                                      color: mainColor,
+                                      textColor: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                      child: new Text("ABOUT US"),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           )
-                      ) : new HeartbeatProgressIndicator(
-                        child: new Image.asset(
-                          'images/wblogo.png',
-                          height: 25.0,
-                        ),
+                        ],
+                      ),
+                    ),
+                    new Container(
+                      padding: EdgeInsets.all(64),
+                      width: MediaQuery.of(context).size.width - 64,
+                      child: new Row(
+                        children: [
+                          new Expanded(
+                            child: Center(
+                              child: new Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    new Text("FIRST", style: TextStyle(fontFamily: "Bebas Neue", fontSize: 40),),
+                                    new Padding(padding: EdgeInsets.all(8),),
+                                    new Text(
+                                        "FIRST: For the Inspiration and Recognition of Science and Technology. Dean Kamen founded FIRST, in 1989, with an ultimate vision and goal to create a culture in America where young students celebrate science and technology.",
+                                        style: TextStyle(fontSize: 20)
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(8),),
+                                    new RaisedButton(
+                                      onPressed: () {
+                                        launch("https://www.firstinspires.org/");
+                                      },
+                                      elevation: 0,
+                                      color: mainColor,
+                                      textColor: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                      child: new Text("LEARN MORE"),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          new Expanded(
+                            child: Center(
+                              child: new Container(
+                                  padding: EdgeInsets.all(32),
+                                  child: new Image.asset(
+                                    "images/first-logo.png",
+                                    fit: BoxFit.contain,
+                                    height: 250,
+                                    width: 450,
+                                  )
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Container(
+                      padding: EdgeInsets.all(64),
+                      width: MediaQuery.of(context).size.width - 64,
+                      child: new Row(
+                        children: [
+                          new Expanded(
+                            child: Center(
+                              child: new Container(
+                                  padding: EdgeInsets.all(32),
+                                  child: new Image.asset(
+                                    "images/valley-logo.png",
+                                    fit: BoxFit.contain,
+                                    height: 250,
+                                    width: 450,
+                                  )
+                              ),
+                            ),
+                          ),
+                          new Expanded(
+                            child: Center(
+                              child: new Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    new Text("VALLEY CHRISTIAN SCHOOLS", style: TextStyle(fontFamily: "Bebas Neue", fontSize: 40),),
+                                    new Padding(padding: EdgeInsets.all(8),),
+                                    new Text(
+                                        "VCS's mission is to provide a nurturing environment offering quality education supported by a strong foundation of Christian values in partnership with parents, equipping students to become leaders to serve God, to serve their families, and to positively impact their communities and the world.",
+                                        style: TextStyle(fontSize: 20)
+                                    ),
+                                    new Padding(padding: EdgeInsets.all(8),),
+                                    new RaisedButton(
+                                      onPressed: () {
+                                        launch("https://vcs.net");
+                                      },
+                                      elevation: 0,
+                                      color: mainColor,
+                                      textColor: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                      child: new Text("LEARN MORE"),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     new Container(
                       width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
-                      child: new SingleChildScrollView(
-                        child: new Column(
-                            children: widgetList
-                        ),
+                      child: new Column(
                       ),
-                    )
+                    ),
+                    new Container(height: 100),
+                    new HomeFooter()
                   ],
                 ),
               ),
@@ -289,7 +479,7 @@ class _HomePageState extends State<HomePage> {
     else {
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Home", style: TextStyle(fontFamily: "Oswald"),),
+          title: new Text("HOME", style: TextStyle(fontFamily: "Bebas Neue"),),
           elevation: 0.0,
           backgroundColor: mainColor,
         ),
@@ -324,11 +514,7 @@ class _HomePageState extends State<HomePage> {
               ),
               new Container(
                 width: (MediaQuery.of(context).size.width > 1200) ? 1000 : MediaQuery.of(context).size.width - 100,
-                child: new SingleChildScrollView(
-                  child: new Column(
-                      children: widgetList
-                  ),
-                ),
+                child: new Column(),
               )
             ],
           ),

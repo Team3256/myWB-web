@@ -1,11 +1,11 @@
 import 'dart:html';
 
 import 'package:fluro/fluro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:mywb_web/utils/config.dart';
 import 'dart:html' as html;
-
 import 'package:mywb_web/utils/theme.dart';
 
 class HomeNavbar extends StatefulWidget {
@@ -27,11 +27,9 @@ class _HomeNavbarState extends State<HomeNavbar> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           new Container(
-//            height: 100,
             width: 300,
-//            color: Colors.greenAccent,
             child: new Image.asset(
-              "images/WB_Website_Logo.png",
+              "images/WB_Website_Banner.png",
               fit: BoxFit.fitHeight,
             )
           ),
@@ -67,7 +65,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 visible: (!_localStorage.containsKey("userID")),
                 child: new OutlineButton(
                   highlightElevation: 6.0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                   borderSide: BorderSide(color: Colors.grey),
                   child: new Text("LOGIN"),
                   textColor: Colors.white,
@@ -79,9 +77,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
               ),
               new Visibility(
                 visible: (_localStorage.containsKey("userID")),
-                child: new RaisedButton(
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                child: new FlatButton(
                   child: new Text("SIGN OUT"),
                   textColor: Colors.white,
                   color: Colors.red,

@@ -10,7 +10,6 @@ import 'package:mywb_web/main.dart';
 import 'package:mywb_web/models/user.dart';
 import 'package:mywb_web/utils/config.dart';
 import 'package:http/http.dart' as http;
-import 'package:mywb_web/utils/phone_number_formatter.dart';
 import 'package:mywb_web/utils/theme.dart';
 import 'dart:html' as html;
 
@@ -274,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                     else {
                       try {
-                        User registerUser = new User.plain();
+                        User registerUser = new User();
                         registerUser.id = fb.auth().currentUser.uid;
                         registerUser.firstName = firstName;
                         registerUser.lastName = lastName;

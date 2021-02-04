@@ -48,31 +48,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void login() async {
-    setState(() {
-      loginWidget = new Container();
-    });
-    try {
-      await fb.auth().setPersistence("local");
-      await fb.auth().signInWithEmailAndPassword(_email, _password);
-      print("Signed in! ${fb.auth().currentUser.uid}");
-      Navigator.pushNamed(context, '/');
-    } catch (error) {
-      print("Error: ${error.toString()}");
-      accountErrorDialog(error.toString());
-    }
-    setState(() {
-      loginWidget = new RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        onPressed: login,
-        child: new Text("Login [DEPRECATED]"),
-        elevation: 0.0,
-        color: mainColor,
-        textColor: Colors.white,
-      );
-    });
-  }
-
   void googleLogin() async {
     try {
       fb.auth().setPersistence("local");
@@ -83,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
         print(fb.auth().currentUser.email);
         _localStorage["userID"] = fb.auth().currentUser.uid;
         try {
-          http.get("$dbHost/users/${fb.auth().currentUser.uid}", headers: {"Authentication": "Bearer $apiKey"}).then((response) {
+          cycleApiKey();
+          http.get("$dbHost/users/${fb.auth().currentUser.uid}", headers: {"Authorization": "Basic $apiKey"}).then((response) {
             print(response.body);
             if (response.statusCode == 200) {
               print("USER EXISTS IN DB");
@@ -103,14 +79,17 @@ class _LoginPageState extends State<LoginPage> {
               }
               else {
                 html.window.alert("You must use your warriorlife email to create a myWB Account!");
+                fb.auth().signOut();
               }
             }
           });
         } catch (error) {
+          fb.auth().signOut();
           print(error);
         }
       }
     } catch (error) {
+      fb.auth().signOut();
       print(error);
     }
   }
@@ -136,14 +115,6 @@ class _LoginPageState extends State<LoginPage> {
 
   _LoginPageState() {
     print(html.window.location.toString());
-    loginWidget = new RaisedButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      onPressed: login,
-      child: new Text("Login [DEPRECATED]"),
-      elevation: 0.0,
-      color: mainColor,
-      textColor: Colors.white,
-    );
     checkAuth();
   }
 
@@ -166,31 +137,31 @@ class _LoginPageState extends State<LoginPage> {
                   new Text("Login", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: "Oswald"), textAlign: TextAlign.center),
                   new Padding(padding: EdgeInsets.all(16.0),),
                   new Text("Login to your myWB Account below!", textAlign: TextAlign.center,),
-                  new TextField(
-                    decoration: InputDecoration(
-                        icon: new Icon(Icons.email),
-                        labelText: "Email",
-                        hintText: "Enter your email"
-                    ),
-                    onChanged: emailField,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    textCapitalization: TextCapitalization.none,
-                  ),
-                  new TextField(
-                    decoration: InputDecoration(
-                        icon: new Icon(Icons.lock),
-                        labelText: "Password",
-                        hintText: "Enter your password"
-                    ),
-                    onChanged: passwordField,
-                    autocorrect: false,
-                    keyboardType: TextInputType.text,
-                    textCapitalization: TextCapitalization.none,
-                    obscureText: true,
-                  ),
-                  new Padding(padding: EdgeInsets.all(8.0)),
-                  loginWidget,
+                  // new TextField(
+                  //   decoration: InputDecoration(
+                  //       icon: new Icon(Icons.email),
+                  //       labelText: "Email",
+                  //       hintText: "Enter your email"
+                  //   ),
+                  //   onChanged: emailField,
+                  //   autocorrect: false,
+                  //   keyboardType: TextInputType.emailAddress,
+                  //   textCapitalization: TextCapitalization.none,
+                  // ),
+                  // new TextField(
+                  //   decoration: InputDecoration(
+                  //       icon: new Icon(Icons.lock),
+                  //       labelText: "Password",
+                  //       hintText: "Enter your password"
+                  //   ),
+                  //   onChanged: passwordField,
+                  //   autocorrect: false,
+                  //   keyboardType: TextInputType.text,
+                  //   textCapitalization: TextCapitalization.none,
+                  //   obscureText: true,
+                  // ),
+                  // new Padding(padding: EdgeInsets.all(8.0)),
+                  // loginWidget,
                   new Padding(padding: EdgeInsets.all(8.0)),
                   OutlineButton(
                     onPressed: () {
